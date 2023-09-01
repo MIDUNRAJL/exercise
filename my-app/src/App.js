@@ -2,31 +2,54 @@ import React, { useState } from 'react';
 import './App.css';
 
 function App() {
-  const [selectedMuscle, setSelectedMuscle] = useState('');
-  function handleMuscleChange(event) {
-    setSelectedMuscle(event.target.value); // Update selected muscle state
+  const [formData, setFormData] = useState({muscleGroup: ""})
+  const [savedId, setSavedId] = useState(null)
+  const [data, setData] = useState(null)
+
+  const handleChange = (event) =>{
+    const{name, value, type} = event.target
+
+    setFormData((prevData) =>({
+      ...prevData, [name]: inputValue
+    }))
   }
-  fetch('https://api.api-ninjas.com/v1/exercises?muscle=' + selectedMuscle, {
-  method: 'GET',
-  headers: {
-    'X-Api-Key': 'i883KF+Ub1y46gZ7q9zgAA==ANzqtUvdOBx3MqjD',
-    'Content-Type': 'application/json'
-  }
-})
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    savedId(formData.muscleGroup)
+    var muscle = formData.muscleGroup
+$.ajax({
+    method: 'GET',
+    url: 'https://api.api-ninjas.com/v1/exercises?muscle=' + muscle,
+    headers: { 'X-Api-Key': 'i883KF+Ub1y46gZ7q9zgAA==ANzqtUvdOBx3MqjD'},
+    contentType: 'application/json',
+    success: function(result) {
+        console.log(result);
+    },
+    error: function ajaxError(jqXHR) {
+        console.error('Error: ', jqXHR.responseText);
+    }
+});
+
 .then(response => response.json())
 .then(result => {
   console.log(result);
+  setData(result)
 })
 .catch(error => {
   console.error('Error:', error);
 });
+  }
 
   
   return (
-    <div>
-       {/* <h1>Exercise Guide</h1>
-       <h3>Select the Exercise Type</h3>
-       <Button onCli
+    <div className='exercise'>
+        <h1>Exercise Guide</h1>
+       <div>
+
+        <h3>SELECT EXERCISE TYPE</h3>
+
+       
+       <Button onClick
        className="custom-button">
         CARDIO
        </Button>
@@ -53,14 +76,16 @@ function App() {
        <Button onClick={handleClick}
        className="custom-button">
         STRONGMAN       
-       </Button> */}
+       </Button> 
+       </div>
 
        <div>
-        <label>
+        <form onSubmit={handleSubmit}>
+        <label> SELECT THE MUSCLE GROUP </label> 
           <select
                   name="types"
-                  value={selectedMuscle}
-                  onChange={handleMuscleChange}>
+                  value={formData.muscleGroup}
+                  onChange={handleChange}>
                     <option value="">SELECT THE MUSCLE GROUP</option>
                     <option value="abdominal">Abdominals</option>
                     <option value="abductor">Abductors</option>
@@ -80,15 +105,17 @@ function App() {
                     <option value="triceps">Triceps</option>
                   
           </select>
+          </form>
                   
-
-
-
-        </label>
        </div>
-
        <div>
-        <label>
+
+       <form onSubmit={handleSubmit}>
+
+      
+
+      
+        <label> SELECT THE DIFFICULTY LEVEL </label>
           <select
                   name="level">
            <option value="">SELECT THE DIFFICULTY LEVEL</option>  
@@ -96,11 +123,11 @@ function App() {
            <option value="intermediate">Intermediate</option>
            <option value="expert">Expert</option>       
                   </select>
-
-        </label>
-       </div>
-      
-    </div>
+                  <button type="submit">SUBMIT</button>
+                  </form>
+                
+                  </div>
+                   
 
   
    
