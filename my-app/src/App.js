@@ -209,7 +209,7 @@ onChange={handleChange}>
 
 {data.exercises.map((exercise, index) => (
 
-<li key={index}>{exercise.name}</li>
+<li key={index}>{exercise.name} (Equipment: {exercise.equipment}) (Instructions: {exercise.instructions})</li>
 
 ))}
 
@@ -281,7 +281,7 @@ STRONGMAN
 
 filteredData.exercises.map((exercise, index) => (
 
-<li key={index}>{exercise.name}</li>
+<li key={index}>{exercise.name} (Equipment: {exercise.equipment}) (Instructions: {exercise.instructions})</li>
 
 ))
 
